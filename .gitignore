@@ -8,3 +8,7 @@
 /example/.local-chromium/
 
 build/
+/.flutter-plugins
+/.idea/aws.xml
+/.idea/misc.xml
+/.flutter-plugins-dependencies

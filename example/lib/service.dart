@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:image/image.dart' as img;
+import 'package:pos_printer_manager/pos_printer_manager.dart';
 
 class ESCPrinterService {
   final Uint8List? receipt;
