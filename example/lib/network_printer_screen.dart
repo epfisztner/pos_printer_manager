@@ -19,47 +19,56 @@ class _NetWorkPrinterScreenState extends State<NetWorkPrinterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Network Printer Screen ${printProfiles.length}"),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (_) => printProfiles
-                .map(
-                  (e) => PopupMenuItem(
-                    enabled: e["key"] != _name,
-                    child: Text("${e["key"]}"),
-                    onTap: () {
-                      setState(() {
-                        _name = e["key"];
-                      });
-                    },
-                  ),
-                )
-                .toList(),
-          )
-        ],
-      ),
-      body: ListView(
-        children: [
-          ..._printers
-              .map((printer) => ListTile(
-                    title: Text("${printer.name}"),
-                    subtitle: Text("${printer.address}"),
-                    leading: Icon(Icons.cable),
-                    onTap: () => _connect(printer),
-                    onLongPress: () {
-                      _startPrinter();
-                    },
-                    selected: printer.connected,
-                  ))
-              .toList(),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: _isLoading ? Icon(Icons.stop) : Icon(Icons.play_arrow),
-        onPressed: _isLoading ? null : _scan,
-      ),
+
+    return FutureBuilder<List<dynamic>>(
+      future: CapabilityProfile.getAvailableProfiles(),
+      builder: (context, snapshot) {
+
+        List<dynamic> printProfiles = snapshot.data ?? [];
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Network Printer Screen ${printProfiles.length}"),
+            actions: [
+              PopupMenuButton(
+                itemBuilder: (_) => printProfiles
+                    .map(
+                      (e) => PopupMenuItem(
+                        enabled: e["key"] != _name,
+                        child: Text("${e["key"]}"),
+                        onTap: () {
+                          setState(() {
+                            _name = e["key"];
+                          });
+                        },
+                      ),
+                    )
+                    .toList(),
+              )
+            ],
+          ),
+          body: ListView(
+            children: [
+              ..._printers
+                  .map((printer) => ListTile(
+                        title: Text("${printer.name}"),
+                        subtitle: Text("${printer.address}"),
+                        leading: Icon(Icons.cable),
+                        onTap: () => _connect(printer),
+                        onLongPress: () {
+                          _startPrinter();
+                        },
+                        selected: printer.connected,
+                      ))
+                  .toList(),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: _isLoading ? Icon(Icons.stop) : Icon(Icons.play_arrow),
+            onPressed: _isLoading ? null : _scan,
+          ),
+        );
+      }
     );
   }
 

@@ -6,7 +6,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// ensure printer profile is loaded
-  await CapabilityProfile.ensureProfileLoaded();
+  await CapabilityProfile.load();
   print("ensured");
   runApp(MyApp());
 }
