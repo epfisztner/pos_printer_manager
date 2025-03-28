@@ -24,7 +24,9 @@ Future<List<String>> findNetworkPrinter({int port = 9100}) async {
 }
 
 Future<List<String>> getAddresses() async {
-  var interfaces = await NetworkInterface.list();
+  var interfaces = await NetworkInterface.list(
+    type: InternetAddressType.IPv4
+  );
   List<String> results = [];
   interfaces.fold(
       results,
