@@ -12,3 +12,4 @@ build/
 /.idea/aws.xml
 /.idea/misc.xml
 /.flutter-plugins-dependencies
+/.idea

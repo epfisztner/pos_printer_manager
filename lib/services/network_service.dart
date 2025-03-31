@@ -8,8 +8,11 @@ class NetworkService {}
 Future<List<String>> findNetworkPrinter({int port = 9100}) async {
   final _info = NetworkInfo();
   String? ip = await (_info.getWifiIP());
-  if (ip?.isEmpty == true) {
+  if (ip == null || ip.isEmpty == true) {
     ip = (await getAddresses()).first;
+  }
+  if (ip == null || ip.isEmpty == true){
+    ip = '192.168.1';
   }
   PosPrinterManager.logger.info("ip: $ip");
   final String subnet = ip!.substring(0, ip.lastIndexOf('.'));
