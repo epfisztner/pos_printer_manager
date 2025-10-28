@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:blue_thermal_printer/blue_thermal_printer.dart' as themal;
-import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart' as winThermal;
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:pos_printer_manager/models/pos_printer.dart';
 import 'package:pos_printer_manager/pos_printer_manager.dart';
@@ -13,7 +11,6 @@ import 'printer_manager.dart';
 /// Bluetooth Printer
 class BluetoothPrinterManager extends PrinterManager {
   Generator? generator;
-  themal.BlueThermalPrinter bluetooth = themal.BlueThermalPrinter.instance;
   // fblue.FlutterBlue flutterBlue = fblue.FlutterBlue.instance;
   // fblue.BluetoothDevice fbdevice;
 
@@ -38,11 +35,8 @@ class BluetoothPrinterManager extends PrinterManager {
   Future<ConnectionResponse> connect(
       {Duration? timeout = const Duration(seconds: 5)}) async {
     try {
-      if (Platform.isAndroid || Platform.isIOS) {
-        var device = themal.BluetoothDevice(printer.name, printer.address);
-        await bluetooth.connect(device);
-      } else if (Platform.isWindows) {
-        await winThermal.PrintBluetoothThermal.connect(macPrinterAddress: printer.address!);
+      if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
+        await PrintBluetoothThermal.connect(macPrinterAddress: printer.address!);
       }
 
       this.isConnected = true;
@@ -78,23 +72,12 @@ class BluetoothPrinterManager extends PrinterManager {
       if (!isConnected) {
         await connect();
       }
-      if (Platform.isAndroid || Platform.isIOS) {
-        if ((await (bluetooth.isConnected as FutureOr<bool>))) {
-          Uint8List message = Uint8List.fromList(data);
-          PosPrinterManager.logger.warning("message.length ${message.length}");
-          await bluetooth.writeBytes(message);
-          if (isDisconnect) {
-            await disconnect();
-          }
-          return ConnectionResponse.success;
-        }
-        return ConnectionResponse.printerNotConnected;
-      } else if (Platform.isWindows) {
-        final bool connectionStatus = await winThermal.PrintBluetoothThermal.connectionStatus;
+      if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
+        final bool connectionStatus = await PrintBluetoothThermal.connectionStatus;
         if (connectionStatus) {
           Uint8List message = Uint8List.fromList(data);
           PosPrinterManager.logger.warning("message.length ${message.length}");
-          await winThermal.PrintBluetoothThermal.writeBytes(message);
+          await PrintBluetoothThermal.writeBytes(message);
           if (isDisconnect) {
             await disconnect();
           }
@@ -111,11 +94,8 @@ class BluetoothPrinterManager extends PrinterManager {
 
   /// [timeout]: milliseconds to wait after closing the socket
   Future<ConnectionResponse> disconnect({Duration? timeout}) async {
-    if (Platform.isAndroid || Platform.isIOS) {
-      await bluetooth.disconnect();
-      this.isConnected = false;
-    } else if (Platform.isWindows) {
-      await winThermal.PrintBluetoothThermal.disconnect;
+    if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
+      await PrintBluetoothThermal.disconnect;
       this.isConnected = false;
     }
 
