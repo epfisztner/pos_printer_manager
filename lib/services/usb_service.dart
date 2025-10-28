@@ -1,8 +1,10 @@
 import 'dart:io';
-import 'package:flutter_usb_printer/flutter_usb_printer.dart';
+// import 'package:flutter_usb_printer/flutter_usb_printer.dart';
 import 'package:pos_printer_manager/models/usb_printer.dart';
 import 'package:pos_printer_manager/pos_printer_manager.dart';
 import 'package:printing/printing.dart';
+
+import 'flutter_usb_printer.dart';
 
 class USBService {
   static Future<List<USBPrinter>> findUSBPrinter() async {

@@ -16,7 +16,7 @@ dependencies:
   printing: ^5.11.1
   win32: ^5.1.1
   ffi: ^2.1.0
-  flutter_usb_printer:  ^0.1.0
+#  flutter_usb_printer:  ^0.1.0
   print_bluetooth_thermal: ^1.1.1
 
 dev_dependencies:
