@@ -75,9 +75,9 @@ class BluetoothPrinterManager extends PrinterManager {
       if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
         final bool connectionStatus = await PrintBluetoothThermal.connectionStatus;
         if (connectionStatus) {
-          Uint8List message = Uint8List.fromList(data);
-          PosPrinterManager.logger.warning("message.length ${message.length}");
-          await PrintBluetoothThermal.writeBytes(message);
+          // Uint8List message = Uint8List.fromList(data);
+          PosPrinterManager.logger.warning("message.length ${data.length}");
+          await PrintBluetoothThermal.writeBytes(data);
           if (isDisconnect) {
             await disconnect();
           }
